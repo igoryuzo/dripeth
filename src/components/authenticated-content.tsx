@@ -1,7 +1,6 @@
 'use client';
 
 import { usePrivy, useSessionSigners } from '@privy-io/react-auth';
-import SendDollarButton from './send-dollar-button';
 import FundWalletButton from './fund-wallet-button';
 import WithdrawUsdcButton from './withdraw-usdc-button';
 import DCAControl from './dca-control';
@@ -48,7 +47,7 @@ export default function AuthenticatedContent() {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center text-center">
         <h1 className="text-5xl font-bold text-zinc-900 dark:text-white sm:text-6xl">
-          Welcome to Skipp
+          Welcome to DripETH
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
           Your journey starts here. Discover something amazing.
@@ -66,10 +65,7 @@ export default function AuthenticatedContent() {
         Send a transaction on Base network with sponsored gas fees.
       </p>
       <div className="mt-8 flex flex-col gap-6 items-center w-full max-w-2xl">
-        <div className="flex gap-4">
-          <SendDollarButton />
-          <FundWalletButton address={user?.wallet?.address} />
-        </div>
+        <FundWalletButton address={user?.wallet?.address} />
 
         <div className="w-full border-t border-zinc-200 dark:border-zinc-800 pt-6">
           <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">

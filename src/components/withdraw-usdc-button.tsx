@@ -45,7 +45,7 @@ export default function WithdrawUsdcButton() {
         }
       );
 
-      setTxHash(result.transactionHash);
+      setTxHash(result.hash);
       console.log('Withdrawal successful:', result);
       
       // Clear form

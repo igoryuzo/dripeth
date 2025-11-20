@@ -3,13 +3,18 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { useState, useEffect } from 'react';
 
-const RECIPIENT_ADDRESS = '0x638d7b6b585F2e248Ecbbc84047A96FD600e204E';
+interface DCAStatus {
+  isActive: boolean;
+  executedTransactions: number;
+  totalTransactions: number;
+  nextExecutionTime: number;
+}
 
 export default function DCAControl() {
   const { user } = usePrivy();
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState<any>(null);
+  const [status, setStatus] = useState<DCAStatus | null>(null);
 
   const embeddedWallet = user?.linkedAccounts?.find(
     (account) => account.type === 'wallet' && account.walletClientType === 'privy'

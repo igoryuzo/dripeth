@@ -1,0 +1,14 @@
+[
+  {
+    "userId": "did:privy:cmi6i8n3d019rjy0dx1r695xh",
+    "walletId": "yncvpvdlyak3ixbg48w0iix4",
+    "walletAddress": "0x9Bc037abe03BF53e2C895C8Af29Dc32cF1Bc4FcD",
+    "amount": 1,
+    "intervalMinutes": 1,
+    "totalTransactions": 5,
+    "executedTransactions": 5,
+    "nextExecutionTime": 1763671879542,
+    "isActive": false,
+    "createdAt": 1763669510963
+  }
+]

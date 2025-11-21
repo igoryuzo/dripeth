@@ -1,6 +1,6 @@
-## Skipp, pay per article instead of gated subscriptions.
+## ethdca
 
-I'll be using x402 and Privy embedded wallets to allow users to pay per WSJ article instead of subscribing.
+Dollar-cost averaging (DCA) automation using Privy embedded wallets and 0x Swap API.
 
 Privy Docs: https://docs.privy.io/recipes/x402#x402
 

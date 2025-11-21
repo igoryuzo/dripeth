@@ -13,7 +13,7 @@ export default function FundWalletButton({ address }: { address?: string }) {
       address,
       options: {
         chain: base,
-        amount: '20', // Default funding amount in USDC
+        amount: '5', // Default funding amount in USDC
         asset: 'USDC', // Fund with USDC
         card: {
           preferredProvider: 'coinbase', // Force Coinbase Onramp

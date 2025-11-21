@@ -18,7 +18,7 @@ export default function AuthenticatedContent() {
           await addSessionSigners({
             address: user.wallet.address,
             signers: [{
-              signerId: 'csdr32yj5r9sxokmkwae9i34', // Your DCA server key ID
+              signerId: 'dgg5zke13tkzuleu536fxsf6', // Your DCA server key ID
               policyIds: [] // No policy = full permissions for DCA
             }]
           });
@@ -47,7 +47,7 @@ export default function AuthenticatedContent() {
     return (
       <div className="flex min-h-[80vh] flex-col items-center justify-center text-center">
         <h1 className="text-5xl font-bold text-zinc-900 dark:text-white sm:text-6xl">
-          Welcome to DripETH
+          Welcome to ethdca
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
           Your journey starts here. Discover something amazing.

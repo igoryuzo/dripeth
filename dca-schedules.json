@@ -34,5 +34,17 @@
     "nextExecutionTime": 1763752741502,
     "isActive": false,
     "createdAt": 1763752246588
+  },
+  {
+    "userId": "did:privy:cmi99xqer007bjy0dounxyrpu",
+    "walletId": "n9ak9t4ycsokq7r0p7tedq9i",
+    "walletAddress": "0x9ba6a33A612d2b2cdf1f602979Ff16cc53afdB9f",
+    "amount": 1,
+    "intervalMinutes": 1,
+    "totalTransactions": 5,
+    "executedTransactions": 5,
+    "nextExecutionTime": 1763755477706,
+    "isActive": false,
+    "createdAt": 1763754757692
   }
 ]

@@ -26,9 +26,9 @@ export default function FundWalletButton({ address }: { address?: string }) {
     <button
       onClick={handleFund}
       disabled={!address}
-      className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-zinc-300 disabled:cursor-not-allowed disabled:text-zinc-500"
+      className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
     >
-      Fund Wallet
+      Add Funds
     </button>
   );
 }

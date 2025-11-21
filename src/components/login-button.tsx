@@ -34,61 +34,56 @@ export default function LoginButton() {
     return (
       <button
         disabled
-        className="rounded-lg bg-zinc-300 px-6 py-2 text-sm font-medium text-zinc-500 cursor-not-allowed"
+        className="rounded-xl bg-zinc-200 dark:bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-400 cursor-not-allowed"
       >
-        Loading...
+        <span className="flex items-center gap-2">
+          <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Loading
+        </span>
       </button>
     );
   }
 
   if (authenticated && user) {
     return (
-      <div className="flex items-center gap-4">
-        <div className="flex flex-col items-end gap-1">
-          <span className="text-sm text-zinc-600 dark:text-zinc-400">
-            {user.email?.address || 'Logged in'}
-          </span>
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Wallet Info - Hidden on small mobile */}
+        <div className="hidden sm:flex flex-col items-end gap-0.5">
           {embeddedWallet && 'address' in embeddedWallet && (
-            <>
-              <button
-                onClick={() => copyAddress(embeddedWallet.address)}
-                className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-500 font-mono hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors"
-                title="Click to copy wallet address"
-              >
-                <span>
-                  {embeddedWallet.address.slice(0, 6)}...{embeddedWallet.address.slice(-4)}
-                </span>
+            <button
+              onClick={() => copyAddress(embeddedWallet.address)}
+              className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-mono text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              title="Click to copy wallet address"
+            >
+              <span>
+                {embeddedWallet.address.slice(0, 4)}...{embeddedWallet.address.slice(-4)}
+              </span>
+              {copied ? (
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
                   viewBox="0 0 16 16" 
                   fill="currentColor" 
-                  className="w-3.5 h-3.5"
+                  className="w-3 h-3"
                 >
-                  {copied ? (
-                    <path fillRule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clipRule="evenodd" />
-                  ) : (
-                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 2h2.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 1 .439 1.061V9.5A1.5 1.5 0 0 1 12 11V8.621a3 3 0 0 0-.879-2.121L9 4.379A3 3 0 0 0 6.879 3.5H5.5ZM4 5a1.5 1.5 0 0 0-1.5 1.5v6A1.5 1.5 0 0 0 4 14h5a1.5 1.5 0 0 0 1.5-1.5V6.5A1.5 1.5 0 0 0 9 5H4Z" />
-                  )}
+                  <path fillRule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clipRule="evenodd" />
                 </svg>
-              </button>
-              <div className="flex items-center gap-2">
-                {usdcBalance !== null && (
-                  <span className="text-xs font-medium text-green-600 dark:text-green-400">
-                    {usdcBalance} USDC
-                  </span>
-                )}
-                {ethBalance !== null && (
-                  <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                    {ethBalance} ETH
-                  </span>
-                )}
-              </div>
-            </>
+              ) : (
+                <img 
+                  src="/copy-icon.svg" 
+                  alt="Copy" 
+                  className="w-3 h-3 opacity-60"
+                />
+              )}
+            </button>
           )}
         </div>
+        
         <button
           onClick={logout}
-          className="rounded-lg bg-zinc-900 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="rounded-xl bg-zinc-900 dark:bg-zinc-100 px-4 sm:px-5 py-2 text-sm font-semibold text-white dark:text-zinc-900 transition-all hover:bg-zinc-700 dark:hover:bg-zinc-300 active:scale-[0.98]"
         >
           Logout
         </button>
@@ -99,9 +94,9 @@ export default function LoginButton() {
   return (
     <button
       onClick={login}
-      className="rounded-lg bg-zinc-900 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+      className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 px-5 sm:px-6 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/30 active:scale-[0.98]"
     >
-      Login
+      Get Started
     </button>
   );
 }

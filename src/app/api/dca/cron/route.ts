@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrivyClient } from '@privy-io/node';
-import { encodeFunctionData, erc20Abi } from 'viem';
+import { encodeFunctionData, erc20Abi, createPublicClient, http } from 'viem';
+import { base } from 'viem/chains';
 import { readSchedules, writeSchedules, type DCASchedule } from '@/lib/storage';
 
 const USDC_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC on Base  
@@ -9,6 +10,11 @@ const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'; // 0x A
 const privy = new PrivyClient({
   appId: process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
   appSecret: process.env.PRIVY_APP_SECRET!,
+});
+
+const publicClient = createPublicClient({
+  chain: base,
+  transport: http()
 });
 
 export async function GET(request: Request) {
@@ -38,23 +44,54 @@ export async function GET(request: Request) {
         continue;
       }
 
-      // Check if all transactions completed
-      if (schedule.executedTransactions >= schedule.totalTransactions) {
+      // Check if all weeks completed
+      if (schedule.executedWeeks >= schedule.totalWeeks) {
         schedule.isActive = false;
         updated.push(schedule);
-        results.push({ walletId: schedule.walletId, status: 'completed', message: 'All DCA transactions completed' });
+        results.push({ 
+          walletId: schedule.walletId, 
+          status: 'completed', 
+          message: `DCA completed: ${schedule.executedWeeks} weeks` 
+        });
         continue;
       }
 
-      // Execute transaction
-      console.log(`💰 Executing DCA swap for wallet ${schedule.walletId} (${schedule.executedTransactions + 1}/${schedule.totalTransactions})`);
+      // Get current USDC balance to calculate this week's amount
+      console.log(`💰 Fetching USDC balance for wallet ${schedule.walletAddress}...`);
+      const balanceResult = await publicClient.readContract({
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: 'balanceOf',
+        args: [schedule.walletAddress as `0x${string}`]
+      });
+
+      const currentBalance = Number(balanceResult); // in USDC (6 decimals)
+      
+      if (currentBalance === 0) {
+        console.log(`⚠️ No USDC balance for wallet ${schedule.walletId}, skipping this week`);
+        updated.push(schedule);
+        results.push({ 
+          walletId: schedule.walletId, 
+          status: 'skipped', 
+          message: 'No USDC balance' 
+        });
+        continue;
+      }
+
+      // Calculate this week's swap amount: currentBalance / remainingWeeks
+      const remainingWeeks = schedule.totalWeeks - schedule.executedWeeks;
+      const weeklyAmount = Math.floor(currentBalance / remainingWeeks); // Round down to avoid dust
+      
+      console.log(`💰 Executing DCA swap for wallet ${schedule.walletId} (Week ${schedule.executedWeeks + 1}/${schedule.totalWeeks})`);
+      console.log(`   Current balance: ${(currentBalance / 1_000_000).toFixed(2)} USDC`);
+      console.log(`   Weekly amount: ${(weeklyAmount / 1_000_000).toFixed(2)} USDC`);
       
       try {
         const authContext = {
           authorization_private_keys: [process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY!]
         };
 
-        const amountIn = schedule.amount * 1_000_000; // $1 USDC = 1,000,000 (6 decimals)
+        const amountIn = weeklyAmount; // Already in USDC units (6 decimals)
 
         // Use 0x Swap API for reliable swaps that work with smart wallets
         console.log('📝 Fetching swap quote from 0x API...');
@@ -84,7 +121,7 @@ export async function GET(request: Request) {
         const quote = await quoteResponse.json();
         
         console.log('📝 Swap quote received:', {
-          sellAmount: `${schedule.amount} USDC`,
+          sellAmount: `${(weeklyAmount / 1_000_000).toFixed(2)} USDC`,
           buyAmount: `${(Number(quote.buyAmount) / 1e18).toFixed(6)} ETH`,
           price: quote.price,
           to: quote.transaction?.to || quote.to,
@@ -157,16 +194,18 @@ export async function GET(request: Request) {
           });
 
         // Update schedule
-        schedule.executedTransactions += 1;
-        schedule.nextExecutionTime = now + schedule.intervalMinutes * 60 * 1000;
+        schedule.executedWeeks += 1;
+        schedule.lastExecutionTime = now;
+        schedule.nextExecutionTime = now + (7 * 24 * 60 * 60 * 1000); // Next week
 
         updated.push(schedule);
         results.push({
           walletId: schedule.walletId,
           status: 'success',
           transactionHash: result.hash,
-          executedCount: schedule.executedTransactions,
-          totalCount: schedule.totalTransactions
+          week: schedule.executedWeeks,
+          totalWeeks: schedule.totalWeeks,
+          weeklyAmount: (weeklyAmount / 1_000_000).toFixed(2)
         });
 
         console.log(`✅ DCA swap executed for wallet ${schedule.walletId}: ${result.hash}`);

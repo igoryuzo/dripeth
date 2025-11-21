@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 // POST - Create/update DCA schedule
 export async function POST(request: NextRequest) {
   try {
-    const { userId, walletId, walletAddress, amount, intervalMinutes, totalTransactions } = await request.json();
+    const { userId, walletId, walletAddress } = await request.json();
 
     if (!userId || !walletId || !walletAddress) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -30,20 +30,22 @@ export async function POST(request: NextRequest) {
     const schedules = await readSchedules();
     const existingIndex = schedules.findIndex(s => s.userId === userId);
 
+    const now = Date.now();
+    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+
     const newSchedule: DCASchedule = {
       userId,
       walletId,
       walletAddress,
-      amount: amount || 1,
-      intervalMinutes: intervalMinutes || 1,
-      totalTransactions: totalTransactions || 5,
-      executedTransactions: 0,
-      nextExecutionTime: Date.now(), // Execute immediately on first cron trigger
+      executedWeeks: 0,
+      totalWeeks: 52,
+      nextExecutionTime: now + oneWeek, // First execution in 1 week
       isActive: true,
-      createdAt: Date.now()
+      createdAt: now
     };
 
     if (existingIndex >= 0) {
+      // Reset existing schedule with new start
       schedules[existingIndex] = newSchedule;
     } else {
       schedules.push(newSchedule);

@@ -4,13 +4,21 @@ export interface DCASchedule {
   userId: string;
   walletId: string;
   walletAddress: string;
-  amount: number;
-  intervalMinutes: number;
-  totalTransactions: number;
-  executedTransactions: number;
+  
+  // Week-based tracking (52 weeks = 1 year)
+  executedWeeks: number;
+  totalWeeks: 52;
+  
+  // Execution timing
   nextExecutionTime: number;
+  lastExecutionTime?: number;
+  
+  // Status
   isActive: boolean;
   createdAt: number;
+  
+  // Note: weeklyAmount is calculated dynamically from current USDC balance
+  // weeklyAmount = currentBalance / (totalWeeks - executedWeeks)
 }
 
 const SCHEDULES_KEY = 'dca:schedules';

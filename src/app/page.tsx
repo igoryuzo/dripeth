@@ -3,12 +3,12 @@ import AuthenticatedContent from '@/components/authenticated-content';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
-      {/* Navigation Bar */}
-      <nav className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          {/* Logo */}
-          <div className="text-2xl font-bold text-zinc-900 dark:text-white">
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Floating Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-[var(--glass-border)]">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 sm:px-6 py-3">
+          {/* Logo with subtle gradient */}
+          <div className="text-xl sm:text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
             ethdca
           </div>
 
@@ -17,8 +17,8 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      {/* Main Content with padding for fixed nav */}
+      <main className="pt-16">
         <AuthenticatedContent />
       </main>
     </div>

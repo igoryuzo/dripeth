@@ -2,6 +2,26 @@
 
 Dollar-cost averaging (DCA) automation using Privy embedded wallets, session signers, and 0x Swap API. Funding via Coinbase Apple Pay.
 
+### How It Works
+
+**Simple "Set It and Forget It" DCA:**
+
+1. **Deposit USDC** - Fund your wallet with any amount via Coinbase Apple Pay
+2. **Start DCA** - Your balance is automatically divided over 52 weeks (1 year)
+3. **Weekly Swaps** - Every Monday at 12pm UTC, USDC is swapped to ETH
+4. **Dynamic Adjustment** - Add more USDC anytime, and your weekly amount auto-updates
+5. **No Complexity** - Just one simple schedule that adapts to your deposits
+
+**Example:**
+- Deposit $100 → DCA $1.92/week
+- Add $50 later → DCA automatically increases to match new balance
+- Week 52 completes → Ready to start a new 52-week cycle
+
+**Weekly Amount Calculation:**
+```
+weeklyAmount = currentBalance / remainingWeeks
+```
+
 ## Deployment
 
 ### Vercel KV Database
@@ -10,7 +30,7 @@ This app uses Vercel KV (Redis) to store DCA schedules. The file system storage 
 
 ### Vercel Cron Jobs
 
-This app uses Vercel Cron Jobs to automatically execute DCA schedules. The cron job runs every 5 minutes.
+This app uses Vercel Cron Jobs to automatically execute DCA schedules. The cron job runs **every Monday at 12pm UTC** (`0 12 * * 1`).
 
 ### Required Environment Variables
 

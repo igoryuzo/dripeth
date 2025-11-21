@@ -1,43 +1,15 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
 import { PrivyClient } from '@privy-io/node';
 import { encodeFunctionData, erc20Abi } from 'viem';
+import { readSchedules, writeSchedules, type DCASchedule } from '@/lib/storage';
 
-const DCA_SCHEDULE_PATH = path.join(process.cwd(), 'dca-schedules.json');
 const USDC_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // USDC on Base  
 const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'; // 0x API uses this for native ETH
-
-interface DCASchedule {
-  userId: string;
-  walletId: string;
-  walletAddress: string;
-  amount: number;
-  intervalMinutes: number;
-  totalTransactions: number;
-  executedTransactions: number;
-  nextExecutionTime: number;
-  isActive: boolean;
-  createdAt: number;
-}
 
 const privy = new PrivyClient({
   appId: process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
   appSecret: process.env.PRIVY_APP_SECRET!,
 });
-
-async function readSchedules(): Promise<DCASchedule[]> {
-  try {
-    const data = await fs.readFile(DCA_SCHEDULE_PATH, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function writeSchedules(schedules: DCASchedule[]) {
-  await fs.writeFile(DCA_SCHEDULE_PATH, JSON.stringify(schedules, null, 2));
-}
 
 export async function GET(request: Request) {
   console.log('🔄 DCA Cron job triggered');

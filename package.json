@@ -13,6 +13,7 @@
     "@privy-io/react-auth": "^3.7.0",
     "@uniswap/sdk-core": "^7.9.0",
     "@uniswap/v3-sdk": "^3.26.0",
+    "@vercel/kv": "^1.0.1",
     "jsbi": "^4.3.2",
     "next": "16.0.3",
     "react": "19.2.0",

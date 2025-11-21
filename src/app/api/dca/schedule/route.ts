@@ -1,36 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const DCA_SCHEDULE_PATH = path.join(process.cwd(), 'dca-schedules.json');
-
-interface DCASchedule {
-  userId: string;
-  walletId: string;
-  walletAddress: string;
-  amount: number;
-  intervalMinutes: number;
-  totalTransactions: number;
-  executedTransactions: number;
-  nextExecutionTime: number;
-  isActive: boolean;
-  createdAt: number;
-}
-
-// Helper to read schedules
-async function readSchedules(): Promise<DCASchedule[]> {
-  try {
-    const data = await fs.readFile(DCA_SCHEDULE_PATH, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-// Helper to write schedules
-async function writeSchedules(schedules: DCASchedule[]) {
-  await fs.writeFile(DCA_SCHEDULE_PATH, JSON.stringify(schedules, null, 2));
-}
+import { readSchedules, writeSchedules, type DCASchedule } from '@/lib/storage';
 
 // GET - Get user's DCA schedule
 export async function GET(request: NextRequest) {

@@ -3,6 +3,7 @@
 import { usePrivy, useLogin } from '@privy-io/react-auth';
 import { useState } from 'react';
 import { useUsdcBalance } from '@/hooks/use-usdc-balance';
+import { useEthBalance } from '@/hooks/use-eth-balance';
 
 export default function LoginButton() {
   const { ready, authenticated, user, logout } = usePrivy();
@@ -12,7 +13,8 @@ export default function LoginButton() {
     (account) => account.type === 'wallet' && account.walletClientType === 'privy'
   );
   const walletAddress = embeddedWallet && 'address' in embeddedWallet ? embeddedWallet.address : undefined;
-  const { balance } = useUsdcBalance(walletAddress);
+  const { balance: usdcBalance } = useUsdcBalance(walletAddress);
+  const { balance: ethBalance } = useEthBalance(walletAddress);
   const { login } = useLogin({
     onComplete: ({ user, isNewUser, loginMethod }) => {
       console.log('Login complete:', { user, isNewUser, loginMethod });
@@ -69,11 +71,18 @@ export default function LoginButton() {
                   )}
                 </svg>
               </button>
-              {balance !== null && (
-                <span className="text-xs font-medium text-green-600 dark:text-green-400">
-                  {balance} USDC
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {usdcBalance !== null && (
+                  <span className="text-xs font-medium text-green-600 dark:text-green-400">
+                    {usdcBalance} USDC
+                  </span>
+                )}
+                {ethBalance !== null && (
+                  <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                    {ethBalance} ETH
+                  </span>
+                )}
+              </div>
             </>
           )}
         </div>

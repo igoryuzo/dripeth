@@ -61,21 +61,24 @@ export default function AuthenticatedContent() {
             Dollar Cost Averaging
           </span>
         </h1>
-        
-        <p className="mt-6 max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Stop timing the market. DCA your ETH.
-        </p>
 
-        {/* Feature Pills */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <div className="glass-card rounded-2xl px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300">
-            🔐 Secure Embedded Wallet
+        {/* Trust Badges */}
+        <div className="mt-12 flex flex-col items-center gap-5 max-w-lg mx-auto">
+          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Secured and automated by</span>
+            <img 
+              src="/privy-black-logo.svg" 
+              alt="Privy" 
+              className="h-5 opacity-90 dark:invert"
+            />
           </div>
-          <div className="glass-card rounded-2xl px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300">
-            ⚡️ Gasless Transactions
-          </div>
-          <div className="glass-card rounded-2xl px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300">
-            🔄 Automated Swaps
+          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Swaps routed via</span>
+            <img 
+              src="/0x-black-logo.svg" 
+              alt="0x Protocol" 
+              className="h-7 opacity-90 dark:invert"
+            />
           </div>
         </div>
       </div>

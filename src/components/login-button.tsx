@@ -50,36 +50,34 @@ export default function LoginButton() {
   if (authenticated && user) {
     return (
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Wallet Info - Hidden on small mobile */}
-        <div className="hidden sm:flex flex-col items-end gap-0.5">
-          {embeddedWallet && 'address' in embeddedWallet && (
-            <button
-              onClick={() => copyAddress(embeddedWallet.address)}
-              className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-mono text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-              title="Click to copy wallet address"
-            >
-              <span>
-                {embeddedWallet.address.slice(0, 4)}...{embeddedWallet.address.slice(-4)}
-              </span>
-              {copied ? (
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 16 16" 
-                  fill="currentColor" 
-                  className="w-3 h-3"
-                >
-                  <path fillRule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <img 
-                  src="/copy-icon.svg" 
-                  alt="Copy" 
-                  className="w-3 h-3 opacity-60"
-                />
-              )}
-            </button>
-          )}
-        </div>
+        {/* Wallet Info - Visible on all screen sizes */}
+        {embeddedWallet && 'address' in embeddedWallet && (
+          <button
+            onClick={() => copyAddress(embeddedWallet.address)}
+            className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-mono text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            title="Click to copy wallet address"
+          >
+            <span>
+              {embeddedWallet.address.slice(0, 4)}...{embeddedWallet.address.slice(-4)}
+            </span>
+            {copied ? (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 16 16" 
+                fill="currentColor" 
+                className="w-3 h-3"
+              >
+                <path fillRule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <img 
+                src="/copy-icon.svg" 
+                alt="Copy" 
+                className="w-3 h-3 opacity-60"
+              />
+            )}
+          </button>
+        )}
         
         <button
           onClick={logout}

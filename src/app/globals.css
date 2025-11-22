@@ -107,3 +107,18 @@ body {
 .animate-pulse {
   animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Modal centering - no transition */
+.modal-centered {
+  transition: none !important;
+}
+
+@media (min-width: 640px) {
+  .modal-centered {
+    left: 50% !important;
+    top: 50% !important;
+    bottom: auto !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}

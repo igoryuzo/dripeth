@@ -128,15 +128,21 @@ export default function WithdrawButton() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
+        <>
+          {/* Backdrop with blur - Privy style */}
           <div 
-            className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            className="modal-centered fixed inset-0 z-[999998]"
+            style={{ 
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)'
+            }}
             onClick={handleCloseModal}
           />
 
-          {/* Modal */}
-          <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+          {/* Modal - Bottom on mobile, centered on desktop */}
+          <div className="modal-centered fixed z-[999999] bottom-0 left-0 right-0 w-full sm:w-[500px]">
+            <div className="bg-white dark:bg-zinc-900 border-t sm:border border-zinc-200 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -331,8 +337,9 @@ export default function WithdrawButton() {
                 </div>
               </div>
             )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

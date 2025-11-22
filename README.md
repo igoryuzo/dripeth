@@ -8,19 +8,26 @@ Dollar-cost averaging (DCA) automation using Privy embedded wallets, session sig
 
 1. **Deposit USDC** - Fund your wallet with any amount via Coinbase Apple Pay
 2. **Start DCA** - Your balance is automatically divided over 52 weeks (1 year)
-3. **Weekly Swaps** - Every Monday at 12pm UTC, USDC is swapped to ETH
-4. **Dynamic Adjustment** - Add more USDC anytime, and your weekly amount auto-updates
-5. **No Complexity** - Just one simple schedule that adapts to your deposits
+3. **First Swap** - ⚡️ **Executes immediately** when you click Start DCA!
+4. **Weekly Swaps** - Remaining 51 swaps happen every Monday at 12pm UTC
+5. **Dynamic Adjustment** - Add more USDC anytime, and your weekly amount auto-updates
+6. **No Complexity** - Just one simple schedule that adapts to your deposits
 
 **Example:**
-- Deposit $100 → DCA $1.92/week
-- Add $50 later → DCA automatically increases to match new balance
+- Deposit $100 → First swap of $1.92 executes **instantly**
+- Week 2-52 → $1.92 every Monday
+- Add $50 on week 10 → Weekly amount auto-adjusts to $3.11
 - Week 52 completes → Ready to start a new 52-week cycle
 
 **Weekly Amount Calculation:**
 ```
 weeklyAmount = currentBalance / remainingWeeks
 ```
+
+**Instant First Swap:**
+- No waiting! Your first DCA swap happens immediately
+- Provides instant gratification and confirms everything works
+- Remaining 51 weeks execute via Vercel Cron (every Monday 12pm UTC)
 
 ## Deployment
 

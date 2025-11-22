@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const existingIndex = schedules.findIndex(s => s.userId === userId);
 
     const now = Date.now();
-    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+    const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
     const newSchedule: DCASchedule = {
       userId,
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       walletAddress,
       executedWeeks: 0,
       totalWeeks: 52,
-      nextExecutionTime: now + oneWeek, // First execution in 1 week
+      nextExecutionTime: now, // Will be updated after first immediate execution
       isActive: true,
       createdAt: now
     };

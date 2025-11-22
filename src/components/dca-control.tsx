@@ -54,6 +54,7 @@ export default function DCAControl() {
 
     setIsLoading(true);
     try {
+      // 1. Create the schedule
       const response = await fetch('/api/dca/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,6 +69,30 @@ export default function DCAControl() {
       if (data.success) {
         setIsActive(true);
         setStatus(data.schedule);
+
+        // 2. Execute the first swap immediately!
+        console.log('🚀 Executing first DCA swap immediately...');
+        try {
+          const executeResponse = await fetch('/api/dca/execute-now', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: user.id })
+          });
+          
+          const executeData = await executeResponse.json();
+          if (executeData.success) {
+            console.log('✅ First DCA swap executed!', executeData.transactionHash);
+            // Refresh status to show week 1/52
+            const statusResponse = await fetch(`/api/dca/schedule?userId=${user.id}`);
+            const updatedStatus = await statusResponse.json();
+            if (updatedStatus) {
+              setStatus(updatedStatus);
+            }
+          }
+        } catch (executeError) {
+          console.error('First swap failed, will retry on next cron:', executeError);
+          // Don't throw - the weekly cron will retry
+        }
       }
     } catch (error) {
       console.error('Failed to start DCA:', error);

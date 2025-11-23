@@ -1,6 +1,5 @@
 # ethdca
 
-**Open-source Dollar Cost Averaging for Ethereum.**  
 Making automated DCA accessible to everyone as a public good.
 
 ## How It Works

@@ -80,6 +80,14 @@ export default function AuthenticatedContent() {
               className="h-7 opacity-90 dark:invert"
             />
           </div>
+          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Built on</span>
+            <img 
+              src="/base-logo.svg" 
+              alt="Base" 
+              className="h-6 opacity-90 dark:invert"
+            />
+          </div>
         </div>
       </div>
     );

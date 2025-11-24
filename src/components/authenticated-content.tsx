@@ -4,13 +4,15 @@ import { usePrivy, useSessionSigners } from '@privy-io/react-auth';
 import FundWalletButton from './fund-wallet-button';
 import WithdrawButton from './withdraw-usdc-button';
 import DCAControl from './dca-control';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUsdcBalance } from '@/hooks/use-usdc-balance';
 import { useEthBalance } from '@/hooks/use-eth-balance';
 
 export default function AuthenticatedContent() {
   const { authenticated, user } = usePrivy();
   const { addSessionSigners } = useSessionSigners();
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
   
   const embeddedWallet = user?.linkedAccounts?.find(
     (account) => account.type === 'wallet' && account.walletClientType === 'privy'
@@ -19,6 +21,17 @@ export default function AuthenticatedContent() {
   
   const { balance: usdcBalance } = useUsdcBalance(walletAddress);
   const { balance: ethBalance } = useEthBalance(walletAddress);
+
+  // Shake "How it works" every 3 seconds
+  useEffect(() => {
+    if (!authenticated) {
+      const interval = setInterval(() => {
+        setShouldShake(true);
+        setTimeout(() => setShouldShake(false), 300);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [authenticated]);
 
   // Automatically add session signer when user logs in with a wallet
   useEffect(() => {
@@ -54,6 +67,14 @@ export default function AuthenticatedContent() {
   if (!authenticated) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 text-center">
+        {/* How It Works - Animated link */}
+        <button
+          onClick={() => setShowHowItWorks(true)}
+          className={`mb-8 text-base font-bold text-zinc-700 dark:text-zinc-300 hover:text-[var(--foreground)] transition-colors ${shouldShake ? 'shake-interval' : ''}`}
+        >
+          How it works
+        </button>
+
         {/* Hero Section */}
         <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[var(--foreground)] leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
           Ethereum,
@@ -62,30 +83,107 @@ export default function AuthenticatedContent() {
           </span>
         </h1>
 
+        {/* How It Works Modal */}
+        {showHowItWorks && (
+          <>
+            {/* Backdrop */}
+            <div 
+              className="modal-centered fixed inset-0 z-[999998]"
+              style={{ 
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)'
+              }}
+              onClick={() => setShowHowItWorks(false)}
+            />
+
+            {/* Modal */}
+            <div className="modal-centered fixed z-[999999] bottom-0 left-0 right-0 w-full sm:w-[480px]">
+              <div className="bg-white dark:bg-zinc-900 border-t sm:border border-zinc-200 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl px-8 py-10 shadow-2xl max-h-[90vh] overflow-y-auto">
+                {/* Close button - Upper right */}
+                <button
+                  onClick={() => setShowHowItWorks(false)}
+                  className="absolute top-6 right-6 rounded-xl p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                {/* Header - Minimal */}
+                <div className="mb-10">
+                  <h3 className="text-2xl font-semibold text-[var(--foreground)] tracking-tight text-center">
+                    How it works
+                  </h3>
+                </div>
+
+                {/* Steps - Clean and spacious */}
+                <div className="space-y-8">
+                  <div>
+                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 tracking-wide uppercase">
+                      Step 1
+                    </div>
+                    <p className="text-base text-[var(--foreground)] leading-relaxed">
+                      Fund wallet with USDC via Coinbase Onramp Apple Pay
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 tracking-wide uppercase">
+                      Step 2
+                    </div>
+                    <p className="text-base text-[var(--foreground)] leading-relaxed">
+                      Start DCA - Balance is divided over 52 weeks
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 tracking-wide uppercase">
+                      Step 3
+                    </div>
+                    <p className="text-base text-[var(--foreground)] leading-relaxed">
+                      First swap executes immediately, then weekly on Mon 12pm UTC
+                    </p>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2 tracking-wide uppercase">
+                      Step 4
+                    </div>
+                    <p className="text-base text-[var(--foreground)] leading-relaxed">
+                      Add USDC anytime - Weekly amount auto-adjusts
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
         {/* Trust Badges */}
-        <div className="mt-12 flex flex-col items-center gap-5 max-w-lg mx-auto">
-          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
-            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Secured and automated by</span>
+        <div className="mt-12 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 max-w-4xl mx-auto px-4">
+          <div className="glass-card rounded-2xl px-6 py-3 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-3 sm:gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium whitespace-nowrap">Secured and automated by</span>
             <img 
               src="/privy-black-logo.svg" 
               alt="Privy" 
-              className="h-5 opacity-90 dark:invert"
+              className="h-4 sm:h-5 opacity-90 dark:invert"
             />
           </div>
-          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
-            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Swaps routed via</span>
+          <div className="glass-card rounded-2xl px-6 py-3 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-3 sm:gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium whitespace-nowrap">Swaps routed via</span>
             <img 
               src="/0x-black-logo.svg" 
               alt="0x Protocol" 
-              className="h-7 opacity-90 dark:invert"
+              className="h-5 sm:h-7 opacity-90 dark:invert"
             />
           </div>
-          <div className="glass-card rounded-2xl px-8 py-4 text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-4 shadow-sm">
-            <span className="text-zinc-600 dark:text-zinc-400 font-medium">Built on</span>
+          <div className="glass-card rounded-2xl px-6 py-3 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 flex items-center gap-3 sm:gap-4 shadow-sm">
+            <span className="text-zinc-600 dark:text-zinc-400 font-medium whitespace-nowrap">Built on</span>
             <img 
               src="/base-logo.svg" 
               alt="Base" 
-              className="h-6 opacity-90 dark:invert"
+              className="h-5 sm:h-6 opacity-90 dark:invert"
             />
           </div>
         </div>

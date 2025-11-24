@@ -187,6 +187,32 @@ export default function AuthenticatedContent() {
                   <WithdrawButton />
                 </div>
               </div>
+
+              <a
+                href="https://github.com/igoryuzo/ethdca"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-card rounded-3xl p-4 shadow-sm hover:shadow-md transition-shadow block"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-zinc-900/10 dark:bg-zinc-100/10">
+                      <img 
+                        src="/github.svg" 
+                        alt="GitHub" 
+                        className="w-5 h-5 opacity-80 dark:invert"
+                      />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-[var(--foreground)]">Contribute to open source</div>
+                      <div className="text-xs text-zinc-500 dark:text-zinc-400">View code on GitHub</div>
+                    </div>
+                  </div>
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </a>
             </div>
           </>
         )}
